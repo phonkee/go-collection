@@ -85,7 +85,7 @@ func (c Collection[T]) Enumerate(fn func(int, T)) Collection[T] {
 
 // Filter Collection items  by given filter function
 func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
-	var result Collection[T]
+	result := make(Collection[T], 0, c.Len())
 	c.Each(func(t T) {
 		if fn(t) {
 			result = append(result, t)
@@ -166,7 +166,7 @@ func (c Collection[T]) TakeUntil(fn func(p T) bool) Collection[T] {
 
 // Unique only returns collection of items that are unique
 func (c Collection[T]) Unique(fn func(p T) string) Collection[T] {
-	var result Collection[T]
+	result := make(Collection[T], 0, len(c))
 	seen := make(map[string]struct{})
 	c.Each(func(t T) {
 		key := fn(t)
