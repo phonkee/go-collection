@@ -87,10 +87,9 @@ func (c Collection[T]) Enumerate(fn func(int, T)) Collection[T] {
 func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
 	var result Collection[T]
 	c.Each(func(t T) {
-		if !fn(t) {
-			return
+		if fn(t) {
+			result = append(result, t)
 		}
-		result = append(result, t)
 	})
 	return result
 }
