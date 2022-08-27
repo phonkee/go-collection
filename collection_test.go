@@ -176,6 +176,8 @@ func TestCollection(t *testing.T) {
 	})
 
 	t.Run("Test Complete", func(t *testing.T) {
+		var got int
+		var expected = 2
 		coll := Collection[int]{1, 2, 3}
 		coll.
 			Sub(func(c Collection[int]) {
@@ -193,8 +195,11 @@ func TestCollection(t *testing.T) {
 			}).
 			// do something with last item (if available) - returns bool if called
 			Last(func(item int) {
-				fmt.Printf("last item: %v\n", item)
+				got = item
 			})
+		if got != expected {
+			t.Error("Last failed")
+		}
 	})
 
 	t.Run("Test Map", func(t *testing.T) {
