@@ -83,6 +83,18 @@ func (c Collection[T]) Enumerate(fn func(int, T)) Collection[T] {
 	return c
 }
 
+// Filter Collection items  by given filter function
+func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
+	var result Collection[T]
+	c.Each(func(t T) {
+		if !fn(t) {
+			return
+		}
+		result = append(result, t)
+	})
+	return result
+}
+
 // First calls method on first element in the list, if not applied it returns false
 func (c Collection[T]) First(fn func(p T)) bool {
 	if len(c) == 0 {
