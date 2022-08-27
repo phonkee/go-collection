@@ -179,14 +179,15 @@ func TestCollection(t *testing.T) {
 		coll := Collection[int]{1, 2, 3}
 		coll.
 			Sub(func(c Collection[int]) {
-				c.Filter(func(i int) bool {
-					return i&1 == 0
-				}).Debug("all")
+				// do something with whole collection independently
 			}).
 			Each(func(i int) {
+				// iterate over each item in collection
 				fmt.Printf("square of %d is %d\n", i, i*i)
 			}).
+			// now debug (print default) with title
 			Debug("after").
+			// do something with last item (if available) - returns bool if called
 			Last(func(item int) {
 				fmt.Printf("last item: %v\n", item)
 			})
