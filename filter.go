@@ -1,5 +1,17 @@
 package collection
 
+// Filter Collection items  by given filter function
+func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
+	var result Collection[T]
+	c.Each(func(t T) {
+		if !fn(t) {
+			return
+		}
+		result = append(result, t)
+	})
+	return result
+}
+
 // FilterFunc is a definition of filter function to be passed to Filter method
 type FilterFunc[T any] func(T) bool
 
