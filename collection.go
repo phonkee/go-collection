@@ -25,9 +25,9 @@ func (c Collection[T]) Chain(others ...Collection[T]) Collection[T] {
 
 // Copy current collection
 func (c Collection[T]) Copy() Collection[T] {
-	return c.Map(func(t T) T {
-		return t
-	})
+	result := make(Collection[T], len(c))
+	copy(result, c)
+	return result
 }
 
 // Cycle returns collection by cycling over collection until the result size is reached.
