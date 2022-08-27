@@ -86,12 +86,12 @@ func (c Collection[T]) Enumerate(fn func(int, T)) Collection[T] {
 // Filter interfaces by given functions
 func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
 	var result Collection[T]
-	for _, item := range c {
-		if !fn(item) {
-			continue
+	c.Each(func(t T) {
+		if !fn(t) {
+			return
 		}
-		result = append(result, item)
-	}
+		result = append(result, t)
+	})
 	return result
 }
 
@@ -169,12 +169,12 @@ func (c Collection[T]) TakeUntil(fn func(p T) bool) Collection[T] {
 func (c Collection[T]) Unique(fn func(p T) string) Collection[T] {
 	var result Collection[T]
 	seen := make(map[string]struct{})
-	for _, t := range c {
+	c.Each(func(t T) {
 		key := fn(t)
 		if _, ok := seen[key]; !ok {
 			result = append(result, t)
 			seen[key] = struct{}{}
 		}
-	}
+	})
 	return result
 }
