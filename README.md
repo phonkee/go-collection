@@ -1,6 +1,6 @@
 # collection
 
-Simple immutable collection generic type. It's only simple read only collection.
+Simple immutable collection generic type. That's all.
 
 # author
 
