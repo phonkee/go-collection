@@ -187,6 +187,10 @@ func TestCollection(t *testing.T) {
 			}).
 			// now debug (print default) with title
 			Debug("after").
+			// Filter all odd items
+			Filter(func(t int) bool {
+				return t&1 == 0
+			}).
 			// do something with last item (if available) - returns bool if called
 			Last(func(item int) {
 				fmt.Printf("last item: %v\n", item)
