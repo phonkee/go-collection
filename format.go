@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	PrependedDividerCount = 10
-	SectionHeaderWidth    = 80
+	PrependedDividerCount = 20
+	SectionHeaderWidth    = 120
 	DividerChar           = "="
 )
 
