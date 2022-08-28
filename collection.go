@@ -48,7 +48,7 @@ func (c Collection[T]) Cycle(size int) Collection[T] {
 
 // Debug prints data to stdout, if formatFuncs are not provided, item is printed as whole
 func (c Collection[T]) Debug(title string, formatFuncs ...func(T) string) Collection[T] {
-	Section(fmt.Sprintf("Debug %v", title), func() {
+	Section(fmt.Sprintf("Debug: %v", title), func() {
 		c.Enumerate(func(index int, item T) {
 			var repr string
 			if len(formatFuncs) > 0 {
