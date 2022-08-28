@@ -10,7 +10,7 @@ import (
 // Collection describes a collection of elements.
 type Collection[T any] []T
 
-// Chain other interfaces and return new combined interfaces
+// Chain other collections and return new combined collections
 func (c Collection[T]) Chain(others ...Collection[T]) Collection[T] {
 	size := len(c)
 	for _, other := range others {
@@ -69,7 +69,7 @@ func (c Collection[T]) Debug(title string, formatFuncs ...func(T) string) Collec
 	return c
 }
 
-// Each calls given function for each interface in the list
+// Each calls given function for each item in collection
 func (c Collection[T]) Each(fn func(T)) Collection[T] {
 	return c.Enumerate(func(_ int, t T) {
 		fn(t)
