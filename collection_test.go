@@ -143,6 +143,7 @@ func TestCollection(t *testing.T) {
 		}{
 			{[]int{3, 2, 1, 4}, func(i, j int) bool { return i > j }, []int{4, 3, 2, 1}},
 			{[]int{3, 2, 1, 4}, func(i, j int) bool { return i < j }, []int{1, 2, 3, 4}},
+			{[]int{3, 2, 1, 4}, SortBackward(func(i, j int) bool { return i > j }), []int{1, 2, 3, 4}},
 		}
 
 		for _, item := range data {
