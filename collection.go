@@ -2,6 +2,7 @@ package collection
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
 	"strings"
 )
@@ -123,6 +124,19 @@ func (c Collection[T]) Map(mapFunc func(T) T) Collection[T] {
 	c.Enumerate(func(index int, t T) {
 		result[index] = mapFunc(t)
 	})
+	return result
+}
+
+// Shuffle shuffles the collection
+func (c Collection[T]) Shuffle() Collection[T] {
+	// copy collection first
+	result := c.Copy()
+
+	// do the work
+	rand.Shuffle(result.Len(), func(i, j int) {
+		result[i], result[j] = result[j], result[i]
+	})
+
 	return result
 }
 

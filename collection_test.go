@@ -193,6 +193,10 @@ func TestCollection(t *testing.T) {
 			Filter(func(t int) bool {
 				return t&1 == 0
 			}).
+			// custom debug
+			Debug("custom", Debug("modulo_2", func(t int) string {
+				return fmt.Sprintf("value %v = %v", t, t%2)
+			})).
 			// do something with last item (if available) - returns bool if called
 			Last(func(item int) {
 				got = item
