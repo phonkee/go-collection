@@ -142,8 +142,7 @@ func (c Collection[T]) Shuffle() Collection[T] {
 
 // Sort collection and return it
 func (c Collection[T]) Sort(sortFunc func(t1, t2 T) bool) Collection[T] {
-	result := make(Collection[T], len(c))
-	copy(result, c)
+	result := c.Copy()
 
 	sort.Slice(result, func(i, j int) bool {
 		return sortFunc(result[i], result[j])
