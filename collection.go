@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+// New creates new collection instance
+func New[T any](items ...T) Collection[T] {
+	return Collection[T](items).Copy()
+}
+
 // Collection describes a collection of elements.
 type Collection[T any] []T
 
@@ -104,6 +109,23 @@ func (c Collection[T]) First(fn func(p T)) bool {
 	return true
 }
 
+// Index returns index of the first element that matches given filter function
+func (c Collection[T]) Index(fn func(p T) bool) int {
+	var result int = -1
+	c.Enumerate(func(index int, item T) {
+		if fn(item) {
+			result = index
+		}
+	})
+
+	return result
+}
+
+// Into array
+func (c Collection[T]) Into() []T {
+	return c
+}
+
 // Last calls method on last element in the list, if no elements returns false
 func (c Collection[T]) Last(fn func(p T)) bool {
 	if len(c) == 0 {
@@ -124,6 +146,16 @@ func (c Collection[T]) Map(mapFunc func(T) T) Collection[T] {
 	c.Enumerate(func(index int, t T) {
 		result[index] = mapFunc(t)
 	})
+	return result
+}
+
+// Reverse returns reversed collection
+func (c Collection[T]) Reverse() Collection[T] {
+	result := c.Copy()
+	for i, j := 0, result.Len()-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
+	}
+
 	return result
 }
 
@@ -149,6 +181,11 @@ func (c Collection[T]) Sort(sortFunc func(t1, t2 T) bool) Collection[T] {
 	})
 
 	return result
+}
+
+// SplitAt splits collection at given index
+func (c Collection[T]) SplitAt(at int) (Collection[T], Collection[T]) {
+	return c[:at], c[at:]
 }
 
 // Sub is sub routine that will be run with current collection
