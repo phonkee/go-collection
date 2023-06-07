@@ -214,6 +214,16 @@ func (c Collection[T]) TakeUntil(fn func(p T) bool) Collection[T] {
 	return result
 }
 
+// TakeUntilError is called until the given function returns error.
+func (c Collection[T]) TakeUntilError(fn func(p T) error) error {
+	for _, t := range c {
+		if err := fn(t); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Unique only returns collection of items that are unique
 func (c Collection[T]) Unique(fn func(p T) string) Collection[T] {
 	result := make(Collection[T], 0, len(c))
