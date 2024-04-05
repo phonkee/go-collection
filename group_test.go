@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestGroup(t *testing.T) {
+func TestGroupBy(t *testing.T) {
 
 	type TestStruct struct {
 		value int
@@ -20,7 +20,7 @@ func TestGroup(t *testing.T) {
 		TestStruct{value: 3},
 	)
 
-	g := Group(c, func(item TestStruct) int {
+	g := GroupBy(c, func(item TestStruct) int {
 		return item.value
 	})
 

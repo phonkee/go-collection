@@ -1,7 +1,7 @@
 package collection
 
-// Group elements of the collection by the result of the function
-func Group[T any, K comparable](collection Collection[T], fn func(T) K) map[K]Collection[T] {
+// GroupBy elements of the collection by the result of the function
+func GroupBy[T any, K comparable](collection Collection[T], fn func(T) K) map[K]Collection[T] {
 	// maintain the order and return
 	grouped := make(map[K]Collection[T])
 	for _, item := range collection {
