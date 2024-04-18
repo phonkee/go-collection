@@ -7,6 +7,27 @@ import (
 )
 
 func TestCollection(t *testing.T) {
+	t.Run("test batch", func(t *testing.T) {
+		data := []struct {
+			in     Collection[int]
+			size   int
+			expect []Collection[int]
+		}{
+			{[]int{1, 2, 3, 4, 5, 6}, 2, []Collection[int]{{1, 2}, {3, 4}, {5, 6}}},
+			{[]int{1, 2, 3, 4, 5, 6}, 3, []Collection[int]{{1, 2, 3}, {4, 5, 6}}},
+			{[]int{1, 2, 3, 4, 5, 6}, 4, []Collection[int]{{1, 2, 3, 4}, {5, 6}}},
+			{[]int{1, 2, 3, 4, 5, 6}, 6, []Collection[int]{{1, 2, 3, 4, 5, 6}}},
+			{[]int{1, 2, 3, 4, 5, 6}, 7, []Collection[int]{{1, 2, 3, 4, 5, 6}}},
+			{[]int{1, 2, 3, 4, 5, 6}, 10, []Collection[int]{{1, 2, 3, 4, 5, 6}}},
+		}
+		for _, item := range data {
+			found := item.in.Batch(item.size)
+			if !reflect.DeepEqual(found, item.expect) {
+				t.Errorf("Expected %v, found %v", item.expect, found)
+			}
+		}
+	})
+
 	t.Run("Test Cycle", func(t *testing.T) {
 		data := []struct {
 			in     Collection[int]
