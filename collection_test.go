@@ -2,7 +2,6 @@ package collection
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -52,34 +51,6 @@ func TestCollection(t *testing.T) {
 			}
 		}
 
-	})
-
-	t.Run("Test FilterMut - inplace change", func(t *testing.T) {
-		for _, data := range []struct {
-			in           Collection[int]
-			deleteValues []int
-			expect       Collection[int]
-		}{
-			{[]int{1, 2, 3}, []int{1}, []int{2, 3}},
-			{[]int{1, 2, 3}, []int{6}, []int{1, 2, 3}},
-			{[]int{1, 2, 3}, nil, []int{1, 2, 3}},
-			{[]int{1, 2, 3}, []int{77, 99}, []int{1, 2, 3}},
-			{[]int{1, 2, 3}, []int{2}, []int{1, 3}},
-			{[]int{1, 2, 3, 4, 5, 6}, []int{3, 4, 6}, []int{1, 2, 5}},
-		} {
-			ptr := fmt.Sprintf("%p", data.in)
-			nuData := data.in.FilterMut(func(i int) bool {
-				for _, idx := range data.deleteValues {
-					if idx == i {
-						return false
-					}
-				}
-				return true
-			})
-			assert.Equal(t, data.expect, nuData)
-			ptrNu := fmt.Sprintf("%p", nuData)
-			assert.Equal(t, ptr, ptrNu)
-		}
 	})
 
 	t.Run("Test First", func(t *testing.T) {

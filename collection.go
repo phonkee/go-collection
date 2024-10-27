@@ -100,63 +100,6 @@ func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
 	return result
 }
 
-// FilterMut filters data inplace and returns new collection from this altered data.
-//
-// Warnint! Original collection should not be used after this operation.
-//
-// This method is quite efficient and only uses single channel.
-// In background goroutine we check for items that should be deleted.
-func (c Collection[T]) FilterMut(fn FilterFunc[T]) Collection[T] {
-	// indices is channel where we will store indices of items that should be replaced
-	indices := make(chan int)
-
-	// in separate goroutine we will iterate over collection and send indices of items that should be removed
-	go func() {
-		defer close(indices)
-		for i, t := range c {
-			if !fn(t) {
-				indices <- i
-			}
-		}
-	}()
-
-	result := c
-	// the algorithm works on indices to be removed
-	// whenever we got an index, we move the pointer in collection until we reach the index
-	// then we increment deleted count and continue
-	// every step we move items left by deleted count if they are not to be deleted.
-	// this ensures we are doing this in O(n) time complexity (almost)
-	deleted := 0
-	current := 0
-	allCount := len(c)
-outer:
-	// iterate over indices to be removed
-	for idx := range indices {
-		for current < idx {
-			// cannot go expected of bounds
-			if current >= allCount {
-				break outer
-			}
-
-			result[current-deleted] = c[current]
-			current += 1
-		}
-		if current == idx {
-			deleted += 1
-			current += 1
-			continue outer
-		}
-	}
-
-	// finish moving the rest
-	for current < allCount {
-		result[current-deleted] = c[current]
-		current += 1
-	}
-
-	return result[:allCount-deleted]
-}
-
 // First calls method on first element in the list, if not applied it returns false
 func (c Collection[T]) First(fn func(p T)) bool {
 	if len(c) == 0 {

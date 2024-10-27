@@ -31,12 +31,12 @@ func Split[T any, U constraints.Ordered](c Collection[T], fn func(T) U) map[U]Co
 //
 // Warning! This function will mutate the collection and returns a map. You will lose the original collection.
 // Warning! When you set sorted to true, you must be sure that collection is sorted by given function, otherwise the result will be incorrect.
-func SplitMut[T any, U constraints.Ordered](c Collection[T], fn func(p T) U, sorted ...bool) map[U]Collection[T] {
+func SplitMut[T any, U constraints.Ordered](c Collection[T], fn KeyFunc[T, U], sorted ...bool) map[U]Collection[T] {
 	var isSorted bool
 	if len(sorted) > 0 {
 		isSorted = sorted[0]
 	}
-	// if collection is not sorted, we need to do it now
+	// if the collection is not sorted, we need to do it now
 	// Warning! sort alters the original collection (that's why this function has Mut in its name)
 	if !isSorted {
 		sort.Slice(c, func(i, j int) bool {
@@ -51,7 +51,7 @@ func SplitMut[T any, U constraints.Ordered](c Collection[T], fn func(p T) U, sor
 		// get the key for given item
 		key := fn(item)
 
-		// get range for given key, if it does not exist, create a new one
+		// get range for a given key, if it does not exist, create a new one
 		val, ok := ranges[key]
 		if !ok {
 			// create a new range with start at current index and length 1
