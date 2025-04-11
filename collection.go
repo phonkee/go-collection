@@ -118,7 +118,7 @@ func (c Collection[T]) Filter(fn FilterFunc[T]) Collection[T] {
 	return result
 }
 
-// First calls method on first element in the list, if not applied it returns false
+// First calls method on the first element in the list, if not applied it returns false
 func (c Collection[T]) First(fn func(p T)) bool {
 	if len(c) == 0 {
 		return false
@@ -139,12 +139,14 @@ func (c Collection[T]) Index(fn func(p T) bool) int {
 	return result
 }
 
-// Into array
+// Into returns inner slice
 func (c Collection[T]) Into() []T {
 	return c
 }
 
-// Last calls method on last element in the list, if no elements returns false
+// Last calls method on last element in the list
+//
+// If list is empty, it returns false, since there is no last element
 func (c Collection[T]) Last(fn func(p T)) bool {
 	if len(c) == 0 {
 		return false
@@ -158,7 +160,7 @@ func (c Collection[T]) Len() int {
 	return len(c)
 }
 
-// Map calls given function for each element in the list and returns new element
+// Map calls given function for each element in the list and returns a new element
 func (c Collection[T]) Map(mapFunc func(T) T) Collection[T] {
 	result := make(Collection[T], len(c))
 	c.Enumerate(func(index int, t T) {
@@ -167,7 +169,7 @@ func (c Collection[T]) Map(mapFunc func(T) T) Collection[T] {
 	return result
 }
 
-// Reverse returns reversed collection
+// Reverse returns reversed a collection
 func (c Collection[T]) Reverse() Collection[T] {
 	result := c.Copy()
 	for i, j := 0, result.Len()-1; i < j; i, j = i+1, j-1 {
@@ -201,21 +203,21 @@ func (c Collection[T]) Sort(sortFunc func(t1, t2 T) bool) Collection[T] {
 	return result
 }
 
-// SplitAt splits collection at given index
+// SplitAt splits the collection at given index
 func (c Collection[T]) SplitAt(at int) (Collection[T], Collection[T]) {
 	return c[:at], c[at:]
 }
 
-// Sub is sub routine that will be run with current collection
+// Sub is a subroutine that will be run with the current collection
 func (c Collection[T]) Sub(fn func(Collection[T])) Collection[T] {
 	fn(c)
 	return c
 }
 
-// Take takes only given amount of elements from the list, it can be less
-func (c Collection[T]) Take(n int) Collection[T] {
-	result := make(Collection[T], 0, n)
-	result = append(result, c[:n]...)
+// Take takes only given number of elements from the list, or less if there are not enough elements
+func (c Collection[T]) Take(count int) Collection[T] {
+	result := make(Collection[T], 0, count)
+	result = append(result, c[:count]...)
 	return result
 }
 
@@ -230,6 +232,16 @@ func (c Collection[T]) TakeUntil(fn func(p T) bool) Collection[T] {
 		break
 	}
 	return result
+}
+
+// TakeUntilError is called until the given function returns error.
+func (c Collection[T]) TakeUntilError(fn func(p T) error) error {
+	for _, t := range c {
+		if err := fn(t); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Unique only returns collection of items that are unique

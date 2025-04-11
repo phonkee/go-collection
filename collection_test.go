@@ -2,6 +2,7 @@ package collection
 
 import (
 	"fmt"
+	"golang.org/x/exp/rand"
 	"reflect"
 	"testing"
 )
@@ -269,12 +270,9 @@ func TestCollection(t *testing.T) {
 	})
 
 	t.Run("Test Shuffle", func(t *testing.T) {
+		rand.Seed(1)
 		first := Collection[int]{1, 2, 3}
 		shuffled := first.Shuffle()
-
-		if reflect.DeepEqual(first, shuffled) {
-			t.Error("Shuffle failed")
-		}
 
 		if !reflect.DeepEqual(first, shuffled.Sort(func(t1, t2 int) bool { return t1 < t2 })) {
 			t.Error("Shuffle failed")

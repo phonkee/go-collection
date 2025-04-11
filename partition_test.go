@@ -20,7 +20,7 @@ func TestGroupBy(t *testing.T) {
 		TestStruct{value: 3},
 	)
 
-	g := GroupBy(c, func(item TestStruct) int {
+	g := Partition(c, func(item TestStruct) int {
 		return item.value
 	})
 

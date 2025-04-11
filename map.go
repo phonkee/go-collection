@@ -9,3 +9,14 @@ func Map[T any, U any](collection Collection[T], fn func(T) U) Collection[U] {
 	}
 	return result
 }
+
+// MapFilter calls map and filters the result
+func MapFilter[T any, U any](collection Collection[T], fn func(T) (U, bool)) Collection[U] {
+	result := make(Collection[U], 0)
+	for _, item := range collection {
+		if newItem, ok := fn(item); ok {
+			result = append(result, newItem)
+		}
+	}
+	return result
+}
