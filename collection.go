@@ -15,6 +15,24 @@ func New[T any](items ...T) Collection[T] {
 // Collection describes a collection of elements.
 type Collection[T any] []T
 
+// Batch splits collection into batches of given size
+func (c Collection[T]) Batch(by int) []Collection[T] {
+	if by <= 0 {
+		return []Collection[T]{c}
+	}
+
+	result := make([]Collection[T], 0)
+	for i := 0; i < c.Len(); i += by {
+		end := i + by
+		if end > c.Len() {
+			end = c.Len()
+		}
+		result = append(result, c[i:end])
+	}
+
+	return result
+}
+
 // Chain other collections and return new combined collections
 func (c Collection[T]) Chain(others ...Collection[T]) Collection[T] {
 	size := len(c)
